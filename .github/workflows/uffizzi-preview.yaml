@@ -144,7 +144,7 @@ jobs:
           PGPASSWORD=${{ secrets.PGPASSWORD }}
           export PGPASSWORD
           # Render simple template from environment variables.
-          envsubst < docker-compose.template.yml > docker-compose.rendered.yml
+          envsubst < docker-compose.uffizzi.yml > docker-compose.rendered.yml
           cat docker-compose.rendered.yml
       - name: Hash Rendered Compose File
         id: hash
