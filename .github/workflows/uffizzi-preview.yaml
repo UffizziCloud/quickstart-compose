@@ -1,12 +1,6 @@
 name: Build Images and Handle Uffizzi Previews.
 
 on:
-  push:
-    branches:
-      - main
-      - master
-      - staging
-      - qa
   pull_request:
     types: [opened,reopened,synchronize,closed]
 
@@ -14,7 +8,7 @@ jobs:
   build-vote:
     name: Build and Push `vote`
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' }}
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
     steps:
@@ -40,7 +34,7 @@ jobs:
   build-worker:
     name: Build and Push `worker`
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' }}
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
     steps:
@@ -66,7 +60,7 @@ jobs:
   build-result:
     name: Build and Push `result`
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' }}
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
     steps:
@@ -92,7 +86,7 @@ jobs:
   build-loadbalancer:
     name: Build and Push `loadbalancer`
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' }}
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
     steps:
@@ -118,7 +112,7 @@ jobs:
   render-compose-file:
     name: Render Docker Compose File
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' }}
     needs: 
       - build-vote
       - build-worker
@@ -160,7 +154,7 @@ jobs:
     needs:
       - render-compose-file
     uses: UffizziCloud/preview-action/.github/workflows/reusable.yaml@v2
-    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+    if: ${{ github.event.action != 'closed' }}
     with:
       compose-file-cache-key: ${{ needs.render-compose-file.outputs.compose-file-cache-key }}
       compose-file-cache-path: docker-compose.rendered.yml
@@ -173,7 +167,7 @@ jobs:
   delete-uffizzi-preview:
     name: Use Remote Workflow to Delete an Existing Preview
     uses: UffizziCloud/preview-action/.github/workflows/reusable.yaml@v2
-    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    if: ${{ github.event.action == 'closed' }}
     with:
       compose-file-cache-key: ''
       compose-file-cache-path: docker-compose.rendered.yml
