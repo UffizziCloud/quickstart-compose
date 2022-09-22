@@ -1,0 +1,10 @@
+server {
+               listen       ${PORT};
+               server_name  localhost;
+               location / {
+                 proxy_pass      http://${RESULT_HOST}:${RESULT_PORT}/;
+               }
+               location /vote/ {
+                 proxy_pass      http://${VOTE_HOST}:${VOTE_PORT}/;
+               }
+}

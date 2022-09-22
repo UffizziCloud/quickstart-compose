@@ -1,0 +1,60 @@
+# Uffizzi extension (required)
+x-uffizzi:
+  ingress:
+    service: loadbalancer
+    port: 8080  
+
+# Vote application
+services:
+  redis:
+    image: redis:latest
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
+      POSTGRES_PASSWORD: postgres # "${PGPASSWORD}" # for use with GitHub Actions secrets + reusable workflow
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+
+  worker:
+    image: "${WORKER_IMAGE}"
+    environment:
+      PGUSER: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
+      PGPASSWORD: postgres # "${PGPASSWORD}" # for use with GitHub Actions secrets + reusable workflow
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  result:
+    image: "${RESULT_IMAGE}"
+    environment:
+      PGUSER: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
+      PGDATABASE: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
+      PGPASSWORD: postgres # "${PGPASSWORD}" # for use with GitHub Actions secrets + reusable workflow
+      PORT: 8088
+
+  vote:
+    image: "${VOTE_IMAGE}"
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+    environment:
+      PORT: 8888
+
+  loadbalancer:
+    image: "${LOADBALANCER_IMAGE}"
+    environment:
+      PORT: 8080
+      VOTE_HOST: "localhost"
+      VOTE_PORT: "8888"
+      RESULT_HOST: "localhost"
+      RESULT_PORT: "8088"
+    deploy:
+      resources:
+        limits:
+          memory: 125M
