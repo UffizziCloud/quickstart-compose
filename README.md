@@ -78,8 +78,8 @@ You can follow this [step-by-step guide](https://docs.uffizzi.com/set-up-uffizzi
 </ol>
 </details>
 
-<details><summary><b>Does Uffizzi support monorepos?</b></summary>
-Yes. See the example in this repo. Note: Your CI pipeline will typically include a series of <code>build</code>/<code>push</code> steps for each of the components of your application. Uffizzi just needs to know the fully qualified container registry URL for where to find these built images.
+<details><summary><b>Does Uffizzi support monorepos/polyrepos?</b></summary>
+Yes. Your CI pipeline will typically include a series of <code>build</code>/<code>push</code> steps for each of the components of your application. Uffizzi just needs to know the fully qualified container registry URL for where to find these built images.
 </details>
 
 <details><summary><b>Does Uffizzi support &nbsp; _____________?</b></summary>
