@@ -61,7 +61,7 @@ The application defined by this repo allows users to vote for dogs or cats and s
 
 ## Set up Preview Environments for your application
 
-You can follow this [step-by-step guide](https://docs.uffizzi.com/set-up-uffizzi-for-your-applicaiton) to configure Preview Environments for your own application. The required components are:    
+You can follow this [step-by-step guide](https://docs.uffizzi.com/set-up-uffizzi-for-your-application) to configure Preview Environments for your own application. The required components are:    
 
 - **A Docker Compose template (`docker-compose.uffizzi.yml`) committed to your repo** - This template must include [`ingress`](https://github.com/UffizziCloud/quickstart/blob/6aba97b1e27c8fafba2d6461087abfe06becf9ce/docker-compose.uffizzi.yml#L2-L5) and `services` definitions. For a full list of supported keywords, see [Docker Compose for Uffizzi](https://docs.uffizzi.com/references/compose-spec/).  
 
