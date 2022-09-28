@@ -6,41 +6,42 @@ Get started using Uffizzi Preview Environments in 3 simple steps...
 
 Be sure to uncheck the option **Copy the `main` branch only**. This ensures that the `try-uffizzi` branch will be included in your fork.  
 
-<img src="https://user-images.githubusercontent.com/7218230/191072997-94fdc9cc-2be2-4b44-900f-d4507c6df8a6.png" width="600">  
+<img src="https://user-images.githubusercontent.com/7218230/191072997-94fdc9cc-2be2-4b44-900f-d4507c6df8a6.png" width="400">  
 
 ### 2. Enable GitHub Actions workflows for your fork
 
 Select **Actions**, then select **I understand my workflows, go ahead and enable them**. GitHub Actions is free in public repositories.   
 
-<img src="https://user-images.githubusercontent.com/7218230/191074124-8ace8e9f-4970-46e5-9418-0f18d30bd08c.png" width="600">  
+<img src="https://user-images.githubusercontent.com/7218230/191074124-8ace8e9f-4970-46e5-9418-0f18d30bd08c.png" width="400">  
 
 ### 3. Open a pull request for `try-uffizzi` branch against `main` in your fork  
 
-That's it! This will kick off a GitHub Actions workflow and post the Preview Environment URL as a comment to your PR issue.  
+Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.   
+
+That's it! This will kick off a GitHub Actions workflow and post the Preview Environment URL as a comment to your PR issue. 
+
+<img alt="uffizzi-bot" src="https://user-images.githubusercontent.com/7218230/191825295-50422b35-23ac-47f6-8a22-c67f95c89d8c.png" width="400">
 
 ## What to expect  
 
-The PR will trigger a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-environment.yml) that creates a Uffizzi Preview Environment for the [microservices application](#architecture-of-this-example-app) defined by this repo. The Preview Environment URL will be posted as a comment in your PR issue when the workflow completes, along with a link to the Uffizzi Dashboard where you can view application logs. The Preview Environment and comment is deleted after 1 hour or when the PR is merged/closed.  
-
-<img width="938" alt="uffizzi-bot" src="https://user-images.githubusercontent.com/7218230/191825295-50422b35-23ac-47f6-8a22-c67f95c89d8c.png" width="600">
-
+The PR will trigger a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-preview.yaml) that creates a Uffizzi Preview Environment for the [microservices application](#architecture-of-this-example-app) defined by this repo. The Preview Environment URL will be posted as a comment in your PR issue when the workflow completes, along with a link to the Uffizzi Dashboard where you can view application logs. The Preview Environment will be deleted when the PR is merged/closed or after 1 hour ([configurable](https://github.com/UffizziCloud/quickstart/blob/6aba97b1e27c8fafba2d6461087abfe06becf9ce/docker-compose.uffizzi.yml#L7)).  
 
 ## How it works  
 
 #### Configuration
 
-Previews are configured with a [Docker Compose template](https://github.com/UffizziCloud/quickstart/blob/main/docker-compose.template.yml) that describes the application configuration and a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-environment.yml) that includes a series of jobs triggered by a `pull_request` event and subsequent `push` events:  
+Previews are configured with a [Docker Compose template](https://github.com/UffizziCloud/quickstart/blob/main/docker-compose.uffizzi.yml) that describes the application components and a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-preview.yaml) that includes a series of jobs triggered by a `pull_request` event and subsequent `push` events:  
 
-1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L14-L124)  
-2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L126-L164) from the Docker Compose template and the built images  
-3. [Deploy the application (per the Docker Compose file) to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L166-L185) and post a comment to the PR issue  
-4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L187-L200) when the PR is merged/closed or after `1h`      
+1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L14-L116)  
+2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L118-L156) from the Docker Compose template and the built images  
+3. [Deploy the application (per the Docker Compose file) to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L158-L171) and post a comment to the PR issue  
+4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L173-L184) when the PR is merged/closed or after `1h`      
 
 #### Uffizzi Cloud
 
-Running this workflow will create a [Uffizzi Cloud](https://uffizzi.com) account and project from your GitHub user and repo information. If you sign in to the Uffizzi Dashboard you can view logs, password protect your Preview Environments, manage projects and team members, set role-based access controls, and configure single-sign on (SSO).
+Running this workflow will create a [Uffizzi Cloud](https://uffizzi.com) account and project from your GitHub user and repo information, respectively. If you sign in to the [Uffizzi Dashboard](https://app.uffizzi.com/sign_in) you can view logs, password protect your Preview Environments, manage projects and team members, set role-based access controls, and configure single-sign on (SSO).
 
-Each account receives 10,000 preview minutes per month for free. If you exceed this amount, your Preview Environments will be paused unless you add a credit card. See [our pricing](https://uffizzi.com/pricing) for details.
+Each account receives 10,000 preview minutes per month for free. If you exceed this amount, your Preview Environments will be paused unless you add a credit card. See [our pricing](https://uffizzi.com/pricing) for details. Alternatively, you can [install open-source Uffizzi](https://github.com/UffizziCloud/uffizzi_app/blob/develop/INSTALL.md) if you have your own Kubernetes cluster.
 
 ## Acceptable Use
 
@@ -48,25 +49,64 @@ We strive to keep Uffizzi Cloud free or inexpensive for individuals and small te
 
 ## Architecture of this Example App
 
-This application allows users to vote for dogs or cats and see the results. It consists of the following microservices:  
+The application defined by this repo allows users to vote for dogs or cats and see the results. It consists of the following microservices:  
 
-![Architecture diagram](architecture.png)
+<img src="https://user-images.githubusercontent.com/7218230/192601868-562b705f-bf39-4eb8-a554-2a0738bd8ecf.png" width="400">
 
-* A front-end web app in [Python](/vote) or [ASP.NET Core](/vote/dotnet) which lets you vote between two options
-* A [Redis](https://hub.docker.com/_/redis/) or [NATS](https://hub.docker.com/_/nats/) queue which collects new votes
-* A [.NET Core](/worker/src/Worker), [Java](/worker/src/main) or [.NET Core 2.1](/worker/dotnet) worker which consumes votes and stores them in…
-* A [Postgres](https://hub.docker.com/_/postgres/) or [TiDB](https://hub.docker.com/r/dockersamples/tidb/tags/) database backed by a Docker volume
-* A [Node.js](/result) or [ASP.NET Core SignalR](/result/dotnet) webapp which shows the results of the voting in real time
+* **voting-app** - A frontend web app in [Python](/vote) which lets you vote between two options  
+* **redis** - A [Redis](https://hub.docker.com/_/redis/) queue which collects new votes  
+* **worker** - A [.NET Core](/worker/src/Worker) worker which consumes votes and stores them in…  
+* **db** - A [PostgreSQL](https://hub.docker.com/_/postgres/) database backed by a Docker volume
+* **result-app** - A [Node.js](/result) web app which shows the results of the voting in real time
+
+## Set up Preview Environments for your application
+
+You can follow this [step-by-step guide](https://docs.uffizzi.com/set-up-uffizzi-for-your-applicaiton) to configure Preview Environments for your own application. The required components are:    
+
+- **A Docker Compose template (`docker-compose.uffizzi.yml`) committed to your repo** - This template must include [`ingress`](https://github.com/UffizziCloud/quickstart/blob/6aba97b1e27c8fafba2d6461087abfe06becf9ce/docker-compose.uffizzi.yml#L2-L5) and `services` definitions. For a full list of supported keywords, see [Docker Compose for Uffizzi](https://docs.uffizzi.com/references/compose-spec/).  
+
+- **A Uffizzi preview job added to your pipeline** - In the example app used by this quickstart guide, we use GitHub and GitHub Actions, but Uffizzi is designed to work with any version control system or CI platform. As a convenience, we've written actions/jobs for [these popular CI platforms](https://github.com/UffizziCloud/uffizzi_app/tree/develop/ci/). If your platform is not listed, you can still add Uffizzi to your pipeline by wrapping the [Uffizzi CLI](https://github.com/UffizziCloud/uffizzi_cli), which is distributed as a container image [available on Docker Hub](https://hub.docker.com/r/uffizzi/cli). See our GitHub [`preview-action`](https://github.com/UffizziCloud/preview-action/blob/master/action.yaml) and [reusable workflow](https://github.com/UffizziCloud/preview-action/blob/master/.github/workflows/reusable.yaml) as examples.
+
+## FAQs
+<details><summary><b>What about my database?</b></summary>
+<p>All services defined by your Docker Compose file are deployed to Preview Environments as containers—this includes databases, caches, and other datastores. This means that even if you use a managed database service like Amazon RDS for production, you should use a database <i>image</i> in your Compose (See <a href="https://github.com/UffizziCloud/quickstart/blob/6aba97b1e27c8fafba2d6461087abfe06becf9ce/docker-compose.uffizzi.yml#L15">this example</a> that uses a <code>postgres</code> image from Docker Hub).</p>
+
+<p>If your application requires test data, you will need to seed your database when your Preview Environment is created. Here are two methods for seeding databases:</p>
+<ol>
+  <li>(Recommended) Have your application perform a data migration on start-up</li>
+  <li>Bundle test data into the database image itself. This method is only recommended for small datasets (< 50MB), as it will increase the size of your image and deployment times.</li>
+</ol>
+</details>
+
+<details><summary><b>Does Uffizzi support monorepos/polyrepos?</b></summary>
+Yes. Your CI pipeline will typically include a series of <code>build</code>/<code>push</code> steps for each of the components of your application. Uffizzi just needs to know the fully qualified container registry URL for where to find these built images.
+</details>
+
+<details><summary><b>Does Uffizzi support &nbsp; _____________?</b></summary>
+Uffizzi is container-centric and primarily designed for web languages. In general, if your application can be containerized, described with Docker Compose, and accepts HTTP traffic, Uffizzi can preview it.
+</details>
+
+<details><summary><b>How can my application services communicate?</b></summary>
+Just like when you run <code>docker-compose up</code> locally, all the <code>services</code> defined in your Compose share a local network and can communicate via <code>localhost:port</code>. Applications that belong to different Preview Environments may only communicate via the public Internet.
+</details>
+
+<details><summary><b>How is Uffizzi different from GitHub Actions (or other CI providers)?</b></summary>
+Uffizzi does not replace GitHub Actions or any other CI provider. Uffizzi previews are meant to be added as a step in your existing CI pipeline, after your container images are built and pushed to a container registry.
+</details>
+
+<details><summary><b>Can I connect Uffizzi with Netlify/Vercel?</b></summary>
+Yes. While Uffizzi supports full-stack previews, some users who already leverage frontend platforms like <a href="https://www.netlify.com">Netlify</a> or <a href="https://vercel.com">Vercel</a> want to add Uffizzi previews for their APIs/backend. For help configuring this scenario see:  
+<ul>
+  <li><a href="https://github.com/UffizziCloud/netlify-uffizzi-previews">Netlify + Uffizzi</a></li>  
+  <li><a href="https://github.com/UffizziCloud/foodadvisor">Vercel + Uffizzi</a></li>
+</ul>
+</details>
+
+<details><summary><b>Is Uffizzi open source?</b></summary>
+Yes. Check out the <a href="https://github.com/UffizziCloud/uffizzi_app">main repo</a>
+</details>
 
 
-Notes
------
-
-This example application is meant to demonstrate Uffizzi capabilities and workflow. To configure Preview Environments for your own application, be sure to add a Docker Compose template and add a Uffizzi preview job to your pipeline. This uses Github and Github Actions, but Uffizzi is designed to work with any version control system, container registry, or [CI provider](https://github.com/UffizziCloud/uffizzi_app/tree/develop/ci/).  
-
-You can configure Uffizzi to preview your APIs/backend while static site hosting platforms like [Netlify](https://www.netlify.com) or [Vercel](https://vercel.com/) preview your frontend. For help configuring this scenario see:  
-
-- [Netlify + Uffizzi](https://github.com/UffizziCloud/netlify-uffizzi-previews)
-- [Vercel + Uffizzi](https://github.com/UffizziCloud/foodadvisor)
+## Get in touch
 
 For questions, concerns, issues, or feature requests, please join our fast growing [community](https://uffizzi.slack.com/join/shared_invite/zt-ffr4o3x0-J~0yVT6qgFV~wmGm19Ux9A#/shared-invite/email) on Slack.  
