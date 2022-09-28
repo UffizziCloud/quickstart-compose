@@ -14,8 +14,9 @@ services:
   postgres:
     image: postgres:9.6
     environment:
-      POSTGRES_USER: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
-      POSTGRES_PASSWORD: postgres # "${PGPASSWORD}" # for use with GitHub Actions secrets + reusable workflow
+      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
+      POSTGRES_USER: postgres # "${PGUSER}"
+      POSTGRES_PASSWORD: postgres # "${PGPASSWORD}"
     deploy:
       resources:
         limits:
@@ -24,8 +25,9 @@ services:
   worker:
     image: "${WORKER_IMAGE}"
     environment:
-      PGUSER: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
-      PGPASSWORD: postgres # "${PGPASSWORD}" # for use with GitHub Actions secrets + reusable workflow
+      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
+      PGUSER: postgres # "${PGUSER}"
+      PGPASSWORD: postgres # "${PGPASSWORD}"
     deploy:
       resources:
         limits:
@@ -34,9 +36,10 @@ services:
   result:
     image: "${RESULT_IMAGE}"
     environment:
-      PGUSER: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
-      PGDATABASE: postgres # "${PGUSER}" # for use with GitHub Actions secrets + reusable workflow
-      PGPASSWORD: postgres # "${PGPASSWORD}" # for use with GitHub Actions secrets + reusable workflow
+      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
+      PGUSER: postgres # "${PGUSER}"
+      PGDATABASE: postgres # "${PGUSER}"
+      PGPASSWORD: postgres # "${PGPASSWORD}"
       PORT: 8088
 
   vote:
