@@ -32,10 +32,10 @@ The PR will trigger a [GitHub Actions workflow](https://github.com/UffizziCloud/
 
 Previews are configured with a [Docker Compose template](https://github.com/UffizziCloud/quickstart/blob/main/docker-compose.template.yml) that describes the application components and a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-environment.yml) that includes a series of jobs triggered by a `pull_request` event and subsequent `push` events:  
 
-1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L14-L124)  
-2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L126-L164) from the Docker Compose template and the built images  
-3. [Deploy the application (per the Docker Compose file) to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L166-L185) and post a comment to the PR issue  
-4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/a6d9ec7816da58c4d8c5b2ea47ad9cf3cfa0585f/.github/workflows/uffizzi-previews.yml#L187-L200) when the PR is merged/closed or after `1h`      
+1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L14-L116)  
+2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L118-L156) from the Docker Compose template and the built images  
+3. [Deploy the application (per the Docker Compose file) to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L158-L171) and post a comment to the PR issue  
+4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L173-L184) when the PR is merged/closed or after `1h`      
 
 #### Uffizzi Cloud
 
