@@ -106,7 +106,6 @@ Yes. While Uffizzi supports full-stack previews, some users who already leverage
 Yes. Check out the <a href="https://github.com/UffizziCloud/uffizzi_app">main repo</a>
 </details>
 
-
 ## Get in touch
 
 For questions, concerns, issues, or feature requests, please join our fast growing [community](https://uffizzi.slack.com/join/shared_invite/zt-ffr4o3x0-J~0yVT6qgFV~wmGm19Ux9A#/shared-invite/email) on Slack.  
