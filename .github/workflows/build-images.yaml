@@ -113,7 +113,10 @@ jobs:
     # Pass output of this workflow to another triggered by `workflow_run` event.
     runs-on: ubuntu-latest
     needs: 
-      - build-backstage
+      - build-vote
+      - build-worker
+      - build-result
+      - build-loadbalancer
     outputs:
       compose-file-cache-key: ${{ steps.hash.outputs.hash }}
     steps:
@@ -134,7 +137,7 @@ jobs:
           PGPASSWORD=${{ secrets.PGPASSWORD }}
           export PGPASSWORD
           # Render simple template from environment variables.
-          envsubst < .github/uffizzi/docker-compose.uffizzi.yml > docker-compose.rendered.yml
+          envsubst < docker-compose.uffizzi.yml > docker-compose.rendered.yml
           cat docker-compose.rendered.yml
       - name: Upload Rendered Compose File as Artifact
         uses: actions/upload-artifact@v3
