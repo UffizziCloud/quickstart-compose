@@ -137,7 +137,7 @@ jobs:
           PGPASSWORD=${{ secrets.PGPASSWORD }}
           export PGPASSWORD
           # Render simple template from environment variables.
-          envsubst < .github/uffizzi/docker-compose.uffizzi.yml > docker-compose.rendered.yml
+          envsubst < docker-compose.uffizzi.yml > docker-compose.rendered.yml
           cat docker-compose.rendered.yml
       - name: Upload Rendered Compose File as Artifact
         uses: actions/upload-artifact@v3
