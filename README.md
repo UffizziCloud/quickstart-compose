@@ -33,7 +33,7 @@ The PR will trigger a [GitHub Actions workflow](https://github.com/UffizziCloud/
 Previews are configured with a [Docker Compose template](docker-compose.uffizzi.yml) that describes the application components and two [GitHub Actions workflows](.github/workflows), `uffizzi-build.yaml` and `uffizzi-preview.yaml`. The build workflow runs on `pull_request` events, while the preview workflow triggers only if the build is successful:  
 
 #### `uffizzi-build.yaml`  
-(1) [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L7-L109) if a pull request is opened, reopend, or synchronized.   
+(1) [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L7-L109) if a pull request is opened, reopened, or synchronized.   
 (2) [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L111-L159) from the [Docker Compose template](docker-compose.uffizzi.yml) and the built images; store rendered Compose as an artifact.  
 
 #### `uffizzi-preview.yaml`
