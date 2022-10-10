@@ -1,6 +1,6 @@
 # Uffizzi Quickstart (~ 1 minute)
 
-Get started using Uffizzi Preview Environments in 3 simple steps...
+Go from pull request to Uffizzi Preview Environment in less than one minute...
 
 ### 1. Fork this repo  
 
@@ -10,13 +10,13 @@ Be sure to uncheck the option **Copy the `main` branch only**. This ensures that
 
 ### 2. Enable GitHub Actions workflows for your fork
 
-Select **Actions**, then select **I understand my workflows, go ahead and enable them**. GitHub Actions is free in public repositories.   
+Select **Actions**, then select **I understand my workflows, go ahead and enable them**.   
 
 <img src="https://user-images.githubusercontent.com/7218230/191074124-8ace8e9f-4970-46e5-9418-0f18d30bd08c.png" width="400">  
 
 ### 3. Open a pull request for `try-uffizzi` branch against `main` in your fork  
 
-Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.   
+Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run.   
 
 That's it! This will kick off a GitHub Actions workflow and post the Preview Environment URL as a comment to your PR issue. 
 
@@ -28,16 +28,21 @@ The PR will trigger a [GitHub Actions workflow](https://github.com/UffizziCloud/
 
 ## How it works  
 
-#### Configuration
+### Configuration
 
-Previews are configured with a [Docker Compose template](https://github.com/UffizziCloud/quickstart/blob/main/docker-compose.uffizzi.yml) that describes the application components and a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-preview.yaml) that includes a series of jobs triggered by a `pull_request` event and subsequent `push` events:  
+Previews are configured with a [Docker Compose template](docker-compose.uffizzi.yml) that describes the application components and two [GitHub Actions workflows](.github/workflows), `uffizzi-build.yaml` and `uffizzi-preview.yaml`. The build workflow runs on `pull_request` events, while the preview workflow triggers only if the build is successful:  
 
-1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L14-L116)  
-2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L118-L156) from the Docker Compose template and the built images  
-3. [Deploy the application (per the Docker Compose file) to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L158-L171) and post a comment to the PR issue  
-4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L173-L184) when the PR is merged/closed or after `1h`      
+#### `uffizzi-build.yaml`  
+(1) [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L7-L109) if a pull request is opened, reopend, or synchronized.   
+(2) [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L111-L159) from the [Docker Compose template](docker-compose.uffizzi.yml) and the built images; store rendered Compose as an artifact.  
 
-#### Uffizzi Cloud
+#### `uffizzi-preview.yaml`
+(3) [Download and extract the Docker Compose artifact](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/uffizzi-preview.yaml#L11-L68)  
+(4) [Deploy the application to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L158-L171) and post a comment to the PR issue.  
+
+[Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L161-L174), if the pull request is closed.
+
+### Uffizzi Cloud
 
 Running this workflow will create a [Uffizzi Cloud](https://uffizzi.com) account and project from your GitHub user and repo information, respectively. If you sign in to the [Uffizzi Dashboard](https://app.uffizzi.com/sign_in) you can view logs, password protect your Preview Environments, manage projects and team members, set role-based access controls, and configure single-sign on (SSO).
 
