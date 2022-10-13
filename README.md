@@ -16,7 +16,7 @@ Select **Actions**, then select **I understand my workflows, go ahead and enable
 
 ### 3. Open a pull request for `try-uffizzi` branch against `main` in your fork  
 
-Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run.   
+Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.   
 
 That's it! This will kick off a GitHub Actions workflow and post the Preview Environment URL as a comment to your PR issue. 
 
@@ -35,7 +35,7 @@ Preview Environments are configured with a [Docker Compose template](docker-comp
 1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L8-L114)  
 2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L116-L154) from the Docker Compose template and the built images  
 3. [Deploy the application to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L156-L167) and post a comment to the PR issue  
-4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L169-L180) when the PR is merged/closed or after [`1h`](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/docker-compose.uffizzi.yml#L7).  
+4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L169-L180) when the PR is merged/closed or after [`1h`](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/docker-compose.uffizzi.yml#L7)  
 
 ### Uffizzi Cloud
 
