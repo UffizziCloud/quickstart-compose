@@ -1,4 +1,4 @@
-name: Build Images and Handle Uffizzi Previews
+name: Build Images and Deploy Preview Environment
 
 on:
   pull_request:
