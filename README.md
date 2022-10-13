@@ -24,23 +24,18 @@ That's it! This will kick off a GitHub Actions workflow and post the Preview Env
 
 ## What to expect  
 
-The PR will trigger a [GitHub Actions workflow](https://github.com/UffizziCloud/quickstart/blob/main/.github/workflows/uffizzi-preview.yaml) that creates a Uffizzi Preview Environment for the [microservices application](#architecture-of-this-example-app) defined by this repo. The Preview Environment URL will be posted as a comment in your PR issue when the workflow completes, along with a link to the Uffizzi Dashboard where you can view application logs. The Preview Environment will be deleted when the PR is merged/closed or after 1 hour ([configurable](https://github.com/UffizziCloud/quickstart/blob/6aba97b1e27c8fafba2d6461087abfe06becf9ce/docker-compose.uffizzi.yml#L7)).  
+The PR will trigger a [GitHub Actions workflow](.github/workflows/uffizzi-preview.yaml) that creates a Uffizzi Preview Environment for the [microservices application](#architecture-of-this-example-app) defined by this repo. The Preview Environment URL will be posted as a comment in your PR issue when the workflow completes, along with a link to the Uffizzi Dashboard where you can view application logs. The Preview Environment will be deleted when the PR is merged/closed or after 1 hour ([configurable](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/docker-compose.uffizzi.yml#L7)).  
 
 ## How it works  
 
 ### Configuration
 
-Previews are configured with a [Docker Compose template](docker-compose.uffizzi.yml) that describes the application components and two [GitHub Actions workflows](.github/workflows), `build-images.yaml` and `uffizzi-preview.yaml`. The build workflow runs on `pull_request` events, while the preview workflow triggers only if the build is successful:  
+Preview Environments are configured with a [Docker Compose template](docker-compose.uffizzi.yml) that describes the application components and a [GitHub Actions workflow](.github/workflows/uffizzi-preview.yaml) that includes a series of jobs triggered by a `pull_request` event and subsequent `push` events:  
 
-#### `build-images.yaml`  
-(1) [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L7-L109) if a pull request is opened, reopened, or synchronized.   
-(2) [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L111-L159) from the [Docker Compose template](docker-compose.uffizzi.yml) and the built images; store rendered Compose as an artifact.  
-
-#### `uffizzi-preview.yaml`
-(3) [Download and extract the Docker Compose artifact](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/uffizzi-preview.yaml#L11-L68)  
-(4) [Deploy the application to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/5699f461f752b0bd787d69abc2cfad3b79e0308b/.github/workflows/uffizzi-preview.yaml#L158-L171) and post a comment to the PR issue.  
-
-[Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/0b8e9aaf641924d93edc753e051928e95f3e7ef4/.github/workflows/build-images.yaml#L161-L174), if the pull request is closed.
+1. [Build and push images to a container registry](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L8-L114)  
+2. [Render a Docker Compose file](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L116-L154) from the Docker Compose template and the built images  
+3. [Deploy the application to a Uffizzi Preview Environment](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L156-L167) and post a comment to the PR issue  
+4. [Delete the Preview Environment](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/.github/workflows/uffizzi-preview.yaml#L169-L180) when the PR is merged/closed or after [`1h`](https://github.com/UffizziCloud/quickstart/blob/6cbbb0f65e899cb05c96ea42531280f8d959df1d/docker-compose.uffizzi.yml#L7).  
 
 ### Uffizzi Cloud
 
