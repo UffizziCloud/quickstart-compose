@@ -22,7 +22,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: ephemeron.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v2
@@ -49,7 +49,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: ephemeron.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v2
@@ -76,7 +76,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: ephemeron.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v2
@@ -103,7 +103,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: ephemeron.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v2
