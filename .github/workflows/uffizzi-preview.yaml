@@ -16,13 +16,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_VOTE=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_VOTE }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v3
@@ -43,13 +43,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_WORKER=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_WORKER }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v3
@@ -70,13 +70,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_RESULT=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_RESULT }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v3
@@ -97,13 +97,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_LOADBALANCER=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_LOADBALANCER }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v3
