@@ -16,16 +16,16 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_VOTE=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_VOTE }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -43,16 +43,16 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_WORKER=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_WORKER }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -70,16 +70,16 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_RESULT=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_RESULT }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -97,16 +97,16 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "::set-output name=uuid::$(uuidgen)"
+        run: echo "UUID_LOADBALANCER=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ steps.uuid.outputs.uuid }}
+          images: registry.uffizzi.com/${{ env.UUID_LOADBALANCER }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -122,7 +122,7 @@ jobs:
       - build-result
       - build-loadbalancer
     outputs:
-      compose-file-cache-key: ${{ steps.hash.outputs.hash }}
+      compose-file-cache-key: ${{ env.COMPOSE_FILE_HASH }}
       compose-file-cache-path: docker-compose.rendered.yml
     steps:
       - name: Checkout git repo
@@ -146,12 +146,12 @@ jobs:
           cat docker-compose.rendered.yml
       - name: Hash Rendered Compose File
         id: hash
-        run: echo "::set-output name=hash::$(md5sum docker-compose.rendered.yml | awk '{ print $1 }')"
+        run: echo "COMPOSE_FILE_HASH=$(md5sum docker-compose.rendered.yml | awk '{ print $1 }')" >> $GITHUB_ENV
       - name: Cache Rendered Compose File
         uses: actions/cache@v3
         with:
           path: docker-compose.rendered.yml
-          key: ${{ steps.hash.outputs.hash }}
+          key: ${{ env.COMPOSE_FILE_HASH }}
 
   deploy-uffizzi-preview:
     name: Use Remote Workflow to Preview on Uffizzi
@@ -160,7 +160,7 @@ jobs:
     with:
       compose-file-cache-key: ${{ needs.render-compose-file.outputs.compose-file-cache-key }}
       compose-file-cache-path: ${{ needs.render-compose-file.outputs.compose-file-cache-path }}
-      server: https://app.uffizzi.com/
+      server: https://app.uffizzi.com
     permissions:
       contents: read
       pull-requests: write
@@ -173,7 +173,7 @@ jobs:
     with:
       compose-file-cache-key: ''
       compose-file-cache-path: docker-compose.rendered.yml
-      server: https://app.uffizzi.com/
+      server: https://app.uffizzi.com
     permissions:
       contents: read
       pull-requests: write
