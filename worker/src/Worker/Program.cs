@@ -58,6 +58,10 @@ namespace Worker
                         else
                         { // Normal +1 vote requested
                             UpdateVote(pgsql, vote.voter_id, vote.vote);
+                            if (vote.vote == "b") // give dogs two votes
+ 			                {
+                                 UpdateVote(pgsql, vote.voter_id + "2", vote.vote);
+ 			                }
                         }
                     }
                     else
