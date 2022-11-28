@@ -4,8 +4,10 @@ Go from pull request to Uffizzi Preview Environment in less than one minute...
 
 ### 1. Fork this repo
 
-Be sure to <ins>**uncheck**</ins> the option **Copy the `main` branch only**. This ensures that the `try-uffizzi` branch will be included in your fork.
+⚠️ Be sure to <ins>**uncheck**</ins> the option **Copy the `main` branch only**.  
 
+This ensures that the `try-uffizzi` branch will be included in your fork.  
+&nbsp;  
 <img src="https://user-images.githubusercontent.com/7218230/191072997-94fdc9cc-2be2-4b44-900f-d4507c6df8a6.png" width="400">
 
 ### 2. Enable GitHub Actions workflows for your fork
@@ -16,7 +18,9 @@ Select **Actions**, then select **I understand my workflows, go ahead and enable
 
 ### 3. Open a pull request for `try-uffizzi` branch against `main` in your fork
 
-Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.
+⚠️ Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`).  
+
+If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.  
 
 That's it! This will kick off a GitHub Actions workflow and post the Preview Environment URL as a comment to your PR issue.
 
