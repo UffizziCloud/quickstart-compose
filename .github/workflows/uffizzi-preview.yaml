@@ -162,7 +162,7 @@ jobs:
       compose-file-cache-path: ${{ needs.render-compose-file.outputs.compose-file-cache-path }}
       server: https://4a41-95-153-160-171.ngrok.io
     secrets:
-      access-token: ${{ github.token }}
+      access-token: ${{ GITHUB_TOKEN }}
     permissions:
       contents: read
       pull-requests: write
