@@ -160,7 +160,8 @@ jobs:
     with:
       compose-file-cache-key: ${{ needs.render-compose-file.outputs.compose-file-cache-key }}
       compose-file-cache-path: ${{ needs.render-compose-file.outputs.compose-file-cache-path }}
-      server: https://7635-62-4-33-119.ngrok.io
+      server: https://8d8e-62-4-33-119.ngrok.io
+    secrets:
       access-token: ${{ github.token }}
     permissions:
       contents: read
