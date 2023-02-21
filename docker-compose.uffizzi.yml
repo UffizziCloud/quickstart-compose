@@ -2,7 +2,7 @@
 x-uffizzi:
   ingress:
     service: loadbalancer
-    port: 8080
+    port: 7000
   continuous_previews:
     delete_preview_after: 1h
 
