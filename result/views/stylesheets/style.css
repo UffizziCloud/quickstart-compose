@@ -86,7 +86,7 @@ body {
 }
 
 #choice .choice {
-  width: 49%;
+  width: 50%;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
