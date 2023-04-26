@@ -13,7 +13,6 @@ var express = require('express'),
 io.set('transports', ['polling']);
 
 var port = process.env.PORT || 4000;
-app.listen(port)
 
 // Environment variables for PostgreSQL connection
 var pghost = process.env.PGHOST || 'localhost';
