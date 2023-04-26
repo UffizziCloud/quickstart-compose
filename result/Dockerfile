@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM node:16-slim
 
 # add curl for healthcheck
 # add wait-for-it to delay start
