@@ -4,8 +4,10 @@ Go from pull request to Uffizzi Preview Environment in less than one minute...
 
 ### 1. Fork this repo
 
-Be sure to uncheck the option **Copy the `main` branch only**. This ensures that the `try-uffizzi` branch will be included in your fork.
+⚠️ Be sure to <ins>**uncheck**</ins> the option **Copy the `main` branch only**.  
 
+This ensures that the `try-uffizzi` branch will be included in your fork.  
+&nbsp;  
 <img src="https://user-images.githubusercontent.com/7218230/191072997-94fdc9cc-2be2-4b44-900f-d4507c6df8a6.png" width="400">
 
 ### 2. Enable GitHub Actions workflows for your fork
@@ -16,7 +18,9 @@ Select **Actions**, then select **I understand my workflows, go ahead and enable
 
 ### 3. Open a pull request for `try-uffizzi` branch against `main` in your fork
 
-Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`). If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.
+⚠️ Be sure that you're opening a PR on the branches of _your fork_ (i.e. `your-account/main` ← `your-account/try-uffizzi`).  
+
+If you try to open a PR for `UffizziCloud/main` ← `your-account/try-uffizzi`, the Actions workflow will not run in this example.  
 
 That's it! This will kick off a GitHub Actions workflow and post the Preview Environment URL as a comment to your PR issue.
 
@@ -41,7 +45,7 @@ Preview Environments are configured with a [Docker Compose template](docker-comp
 
 Running this workflow will create a [Uffizzi Cloud](https://uffizzi.com) account and project from your GitHub user and repo information, respectively. If you sign in to the [Uffizzi Dashboard](https://app.uffizzi.com/sign_in) you can view logs, password protect your Preview Environments, manage projects and team members, set role-based access controls, and configure single-sign on (SSO).
 
-Each account receives 10,000 preview minutes per month for free. If you exceed this amount, your Preview Environments will be paused unless you add a credit card. See [our pricing](https://uffizzi.com/pricing) for details. Alternatively, you can [install open-source Uffizzi](https://github.com/UffizziCloud/uffizzi_app/blob/develop/INSTALL.md) if you have your own Kubernetes cluster.
+Open-source projects preview for free on Uffizzi Cloud. All other accounts can subscribe to our Starter or Pro plans. See [our pricing](https://uffizzi.com/pricing) for details. Or if you're an open-source maintainer, you can request free access as by sending an email to opensource@uffizzi.com. Alternatively, if you don't want to use Uffizzi Cloud, you can [install open-source Uffizzi](https://github.com/UffizziCloud/uffizzi_app/blob/develop/INSTALL.md) on your own Kubernetes cluster.
 
 ## Acceptable Use
 
