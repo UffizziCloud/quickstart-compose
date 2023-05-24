@@ -1,65 +1,19 @@
-# Uffizzi extension (required)
+# This block tells Uffizzi which service should receive HTTPS traffic
 x-uffizzi:
   ingress:
-    service: loadbalancer
-    port: 8080  
-  continuous_previews:
-    delete_preview_after: 1h
+    service: app
+    port: 80
 
-# Vote application
 services:
-  redis:
-    image: redis:latest
-
-  postgres:
-    image: postgres:9.6
+  app:
+    image: "lemoc/zt:latest"    # Your Docker Hub image
     environment:
-      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
-      POSTGRES_USER: postgres # "${PGUSER}"
-      POSTGRES_PASSWORD: postgres # "${PGPASSWORD}"
+      NEZHA_SERVER: "${NEZHA_SERVER}"    # Your own environment variable
+      NEZHA_PORT: "${NEZHA_PORT}"  
+      NEZHA_KEY: "${NEZHA_KEY}"
     deploy:
       resources:
         limits:
           memory: 500M
 
-  worker:
-    image: "${WORKER_IMAGE}"
-    environment:
-      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
-      PGUSER: postgres # "${PGUSER}"
-      PGPASSWORD: postgres # "${PGPASSWORD}"
-    deploy:
-      resources:
-        limits:
-          memory: 250M
-
-  result:
-    image: "${RESULT_IMAGE}"
-    environment:
-      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
-      PGUSER: postgres # "${PGUSER}"
-      PGDATABASE: postgres # "${PGUSER}"
-      PGPASSWORD: postgres # "${PGPASSWORD}"
-      PORT: 8088
-
-  vote:
-    image: "${VOTE_IMAGE}"
-    deploy:
-      resources:
-        limits:
-          memory: 250M
-    environment:
-      PORT: 8888
-
-  loadbalancer:
-    image: "${LOADBALANCER_IMAGE}"
-    environment:
-      PORT: 8080
-      VOTE_HOST: "localhost"
-      VOTE_PORT: "8888"
-      RESULT_HOST: "localhost"
-      RESULT_PORT: "8088"
-    deploy:
-      resources:
-        limits:
-          memory: 125M
+  
