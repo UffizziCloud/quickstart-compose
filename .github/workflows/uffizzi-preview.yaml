@@ -1,12 +1,12 @@
-name: Build Images and Deploy Preview Environment
+name: Build Image and Deploy Preview Environment
 
 on:
   pull_request:
     types: [opened,reopened,synchronize,closed]
 
 jobs:
-  build-vote:
-    name: Build and Push `vote`
+  build-app:
+    name: Build and Push `app`
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
     outputs:
@@ -16,13 +16,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate UUID image name
         id: uuid
-        run: echo "UUID_VOTE=$(uuidgen)" >> $GITHUB_ENV
+        run: echo "UUID_APP=$(uuidgen)" >> $GITHUB_ENV
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
-          # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ env.UUID_VOTE }}
+          # An anonymous, ephemeral registry built on ttl.sh
+          images: registry.uffizzi.com/${{ env.UUID_APP }}
           tags: type=raw,value=24h
       - name: Build and Push Image to Uffizzi Ephemeral Registry
         uses: docker/build-push-action@v3
@@ -30,97 +30,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          context: ./vote
-
-  build-worker:
-    name: Build and Push `worker`
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
-    outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-    steps:
-      - name: Checkout git repo
-        uses: actions/checkout@v3
-      - name: Generate UUID image name
-        id: uuid
-        run: echo "UUID_WORKER=$(uuidgen)" >> $GITHUB_ENV
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ env.UUID_WORKER }}
-          tags: type=raw,value=24h
-      - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          context: ./worker
-          
-  build-result:
-    name: Build and Push `result`
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
-    outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-    steps:
-      - name: Checkout git repo
-        uses: actions/checkout@v3
-      - name: Generate UUID image name
-        id: uuid
-        run: echo "UUID_RESULT=$(uuidgen)" >> $GITHUB_ENV
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ env.UUID_RESULT }}
-          tags: type=raw,value=24h
-      - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          context: ./result
-          
-  build-loadbalancer:
-    name: Build and Push `loadbalancer`
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
-    outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-    steps:
-      - name: Checkout git repo
-        uses: actions/checkout@v3
-      - name: Generate UUID image name
-        id: uuid
-        run: echo "UUID_LOADBALANCER=$(uuidgen)" >> $GITHUB_ENV
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # An anonymous, emphemeral registry built on ttl.sh
-          images: registry.uffizzi.com/${{ env.UUID_LOADBALANCER }}
-          tags: type=raw,value=24h
-      - name: Build and Push Image to Uffizzi Ephemeral Registry
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          context: ./loadbalancer
+          context: ./app  # The context should be the directory of your Dockerfile
           
   render-compose-file:
     name: Render Docker Compose File
     runs-on: ubuntu-latest
     needs:
-      - build-vote
-      - build-worker
-      - build-result
-      - build-loadbalancer
+      - build-app
     outputs:
       compose-file-cache-key: ${{ env.COMPOSE_FILE_HASH }}
       compose-file-cache-path: docker-compose.rendered.yml
@@ -129,18 +45,14 @@ jobs:
         uses: actions/checkout@v3
       - name: Render Compose File
         run: |
-          VOTE_IMAGE=$(echo ${{ needs.build-vote.outputs.tags }})
-          export VOTE_IMAGE
-          WORKER_IMAGE=$(echo ${{ needs.build-worker.outputs.tags }})
-          export WORKER_IMAGE
-          RESULT_IMAGE=$(echo ${{ needs.build-result.outputs.tags }})
-          export RESULT_IMAGE
-          LOADBALANCER_IMAGE=$(echo ${{ needs.build-loadbalancer.outputs.tags }})
-          export LOADBALANCER_IMAGE
-          PGUSER=${{ secrets.PGUSER }}
-          export PGUSER
-          PGPASSWORD=${{ secrets.PGPASSWORD }}
-          export PGPASSWORD
+          APP_IMAGE=$(echo ${{ needs.build-app.outputs.tags }})
+          export APP_IMAGE
+          NEZHA_SERVER=${{ secrets.NEZHA_SERVER }}
+          export NEZHA_SERVER
+          NEZHA_PORT=${{ secrets.NEZHA_PORT }}
+          export NEZHA_PORT
+          NEZHA_KEY=${{ secrets.NEZHA_KEY }}
+          export NEZHA_KEY
           # Render simple template from environment variables.
           envsubst < docker-compose.uffizzi.yml > docker-compose.rendered.yml
           cat docker-compose.rendered.yml
