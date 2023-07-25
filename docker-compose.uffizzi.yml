@@ -1,49 +1,38 @@
-# Uffizzi extension (required)
+# Uffizzi extension
 x-uffizzi:
   ingress:
     service: loadbalancer
     port: 8080  
-  continuous_previews:
-    delete_preview_after: 1h
+  continuous_preview:
+    deploy_preview_when_pull_request_is_opened: true
+    delete_preview_when_pull_request_is_closed: true
+    share_to_github: true
 
-# Vote application
+# Vote applicaiton
 services:
   redis:
     image: redis:latest
 
   postgres:
     image: postgres:9.6
-    environment:
-      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
-      POSTGRES_USER: postgres # "${PGUSER}"
-      POSTGRES_PASSWORD: postgres # "${PGPASSWORD}"
-    deploy:
-      resources:
-        limits:
-          memory: 500M
+    secrets:
+      - pg_user
+      - pg_password
 
   worker:
-    image: "${WORKER_IMAGE}"
-    environment:
-      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
-      PGUSER: postgres # "${PGUSER}"
-      PGPASSWORD: postgres # "${PGPASSWORD}"
+    build: ./worker
     deploy:
       resources:
         limits:
           memory: 250M
 
   result:
-    image: "${RESULT_IMAGE}"
+    build: ./result
     environment:
-      # Add your credentials as GitHub Actions Secrets, then use the commented syntax below:
-      PGUSER: postgres # "${PGUSER}"
-      PGDATABASE: postgres # "${PGUSER}"
-      PGPASSWORD: postgres # "${PGPASSWORD}"
       PORT: 8088
 
   vote:
-    image: "${VOTE_IMAGE}"
+    build: ./vote
     deploy:
       resources:
         limits:
@@ -52,14 +41,21 @@ services:
       PORT: 8888
 
   loadbalancer:
-    image: "${LOADBALANCER_IMAGE}"
-    environment:
-      PORT: 8080
-      VOTE_HOST: "localhost"
-      VOTE_PORT: "8888"
-      RESULT_HOST: "localhost"
-      RESULT_PORT: "8088"
-    deploy:
-      resources:
-        limits:
-          memory: 125M
+    image: nginx:latest
+    configs:
+      - source: nginx-vote-conf
+        target: /etc/nginx/conf.d/vote.conf
+
+# Loadbalancer configuration
+configs:
+  nginx-vote-conf:
+    file: ./loadbalancer/vote.conf
+    
+# Postgres credentials
+secrets:
+  pg_user:
+    external: true               # indicates value is external to this repository
+    name: "POSTGRES_USER"        # i.e., value should be added in the Uffizzi Dashboard
+  pg_password:
+    external: true               # indicates value is external to this repository
+    name: "POSTGRES_PASSWORD"    # i.e., value should be added in the Uffizzi Dashboard
