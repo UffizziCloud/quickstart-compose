@@ -30,7 +30,6 @@ namespace Worker
                 .AddTransient<IMessageQueue, MessageQueue>()
                 .AddSingleton<QueueWorker>()
                 .AddDbContext<VoteContext>(builder => builder.UseMySQL(config.GetConnectionString("VoteData")));
-
             var provider = services.BuildServiceProvider();
             var worker = provider.GetService<QueueWorker>();
             worker.Start();
